@@ -1,0 +1,28 @@
+.vote-button{
+    width:90%;
+    background-color: transparent;
+    border: white 1px solid;
+    color: white;
+    border-radius: 5px;
+    height: 50px;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.vote-button::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--vote-width, 0);
+  height: 100%;
+  background-color: rgba(72, 72, 72, 0.5); /* semi-transparent blue */
+  pointer-events: none;
+  transition: width 0.8s ease;
+
+}
+
+.options-list{
+    margin-bottom: 1rem;
+}

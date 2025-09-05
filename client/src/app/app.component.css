@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  background-color: #141517;
+  min-height: 100vh;
+  color: white; /* optional: text color */
+  margin: 0;
+}
+
+html, body {
+      margin: 0;
+      padding: 0;
+    }
