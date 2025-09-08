@@ -21,7 +21,7 @@
                 (click)="vote($index,optionBtn)" 
                 class="vote-button d-flex justify-content-between align-items-center ps-3" 
                 [style.--vote-width]="getPercentage(option) + '%'"
-                [style.--button-color]="getOptionColor($index === votedIndex)"
+                [style.--button-color]="getOptionColor($index)"
                 [class.border-primary]="$index === votedIndex"
                 >
   

@@ -23,6 +23,7 @@ votedIndex: number | null = null;
   @Output() voted=new EventEmitter<number>();
 
   pollVoted=false;
+  
  
   ngOnInit(): void {
     this.hasVoted();
@@ -35,7 +36,8 @@ votedIndex: number | null = null;
     }
     this.voted.emit(optionIndex);
     this.pollVoted=true;
-    button.classList.add('border-success');
+    this.votedIndex=optionIndex;
+    button.classList.add('border-primary');
   }
 
   
@@ -60,11 +62,9 @@ votedIndex: number | null = null;
     }
   }
 
-  getOptionColor(isVoted:boolean){
-    if(isVoted){
-      return "rgba(13, 110, 253, 0.3)"
-    }
-      return "rgba(72, 72, 72, 0.5)"
+  getOptionColor(index:number){
+    return index === this.votedIndex ? 'rgba(13, 110, 253, 0.3)' : 'rgba(72, 72, 72, 0.5)';
   }
+
   
 }
