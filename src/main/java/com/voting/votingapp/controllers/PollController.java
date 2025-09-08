@@ -30,11 +30,13 @@ public class PollController {
     public ResponseEntity<PaginatedResponse<Poll>> GetPolls(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "idDesc") String sort
-    ){
+            @RequestParam(defaultValue = "idDesc") String sort,
+            @RequestParam(required = false) String search
+    ) {
 
         int zeroBasedPage = page - 1 < 0 ? 0 : page - 1;
-        Page<Poll> pollsPage = pollService.getPolls(zeroBasedPage, size, sort);
+
+        Page<Poll> pollsPage = pollService.getPolls(zeroBasedPage, size, sort, search);
 
         PaginatedResponse<Poll> response = new PaginatedResponse<>(
                 pollsPage.getContent(),
@@ -46,8 +48,8 @@ public class PollController {
         );
 
         return ResponseEntity.ok(response);
-
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Poll> getPoll(@PathVariable long id){

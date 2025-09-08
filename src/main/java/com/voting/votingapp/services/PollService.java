@@ -23,13 +23,16 @@ public class PollService {
         this.pollRepository = pollRepository;
     }
 
-    public Page<Poll> getPolls(int page,int size,String sort) {
-        String property = sort.replaceAll("Asc|Desc", "");
+    public Page<Poll> getPolls(int page, int size, String sort, String search) {
         Sort.Direction direction = sort.endsWith("Desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sort.toLowerCase().startsWith("id") ? "id" : "id";
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, sortField));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, property));
-        return pollRepository.findAll(pageable);
-
+        if (search == null || search.isEmpty()) {
+            return pollRepository.findAll(pageRequest);
+        } else {
+            return pollRepository.findByQuestionContainingIgnoreCase(search, pageRequest);
+        }
     }
 
     public Poll createPoll(Poll poll) {
