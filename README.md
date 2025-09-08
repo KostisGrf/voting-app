@@ -38,7 +38,7 @@ Then run:
 docker-compose up -d
 ```
 
-### 4. Run the backend
+### 3. Run the backend
 ```bash
 mvn spring-boot:run
 ```
