@@ -26,7 +26,7 @@ It was created **for training and learning purposes** – to practice full-stack
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/voting-app.git
+git clone https://github.com/KostisGrf/voting-app.git
 cd voting-app
 ```
 
