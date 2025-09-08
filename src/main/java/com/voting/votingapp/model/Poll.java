@@ -17,7 +17,12 @@ public class Poll {
     private String question;
 
     @ElementCollection
+    @CollectionTable(
+            name = "poll_options",
+            joinColumns = @JoinColumn(name = "poll_id", foreignKey = @ForeignKey(name = "fk_poll_options", foreignKeyDefinition = "FOREIGN KEY (poll_id) REFERENCES poll(id) ON DELETE CASCADE"))
+    )
     private List<OptionVote> options = new ArrayList<>();
+
 
 
 

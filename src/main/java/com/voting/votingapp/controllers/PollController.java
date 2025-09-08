@@ -1,8 +1,10 @@
 package com.voting.votingapp.controllers;
 
+import com.voting.votingapp.dtos.PaginatedResponse;
 import com.voting.votingapp.model.Poll;
 import com.voting.votingapp.request.Vote;
 import com.voting.votingapp.services.PollService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,26 @@ public class PollController {
     }
 
     @GetMapping
-    public List<Poll> GetPolls(){
-        return pollService.getPolls();
+    public ResponseEntity<PaginatedResponse<Poll>> GetPolls(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "idDesc") String sort
+    ){
+
+        int zeroBasedPage = page - 1 < 0 ? 0 : page - 1;
+        Page<Poll> pollsPage = pollService.getPolls(zeroBasedPage, size, sort);
+
+        PaginatedResponse<Poll> response = new PaginatedResponse<>(
+                pollsPage.getContent(),
+                page,
+                pollsPage.getSize(),
+                pollsPage.getTotalElements(),
+                pollsPage.getTotalPages(),
+                pollsPage.isLast()
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/{id}")
