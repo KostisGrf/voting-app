@@ -4,3 +4,22 @@ html, body {
   padding: 0;
   background-color: #141517;
 }
+
+.accordion,
+.accordion .accordion-item,
+.accordion .accordion-header,
+.accordion .accordion-button,
+.accordion .accordion-button:focus,
+.accordion .accordion-button.collapsed,
+.accordion .accordion-button:not(.collapsed),
+.accordion .accordion-body {
+  background: transparent !important;        /* removes background-color */
+  background-image: none !important;        /* removes gradient background-image */
+  box-shadow: none !important;              /* remove any shadows */
+                      /* remove borders (if desired) */
+  color: inherit !important;                /* keep text color from parent */
+}
+
+.accordion-button::after {
+  filter: invert(1) brightness(2); /* turns the dark arrow into white */
+}

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Poll } from '../../shared/poll';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
+import { paginatedResponse } from '../../shared/paginatedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class PollService {
 
   }
 
-  getPolls():Observable<Poll[]>{
-    return this.http.get<Poll[]>(this.baseUrl);
+  getPolls(page:number,size:number,sort:String):Observable<paginatedResponse>{
+    return this.http.get<paginatedResponse>(this.baseUrl+`?page=${page}&size=${size}&sort=${sort}`).pipe(delay(500));
   }
 
   vote(pollId:number,optionIndex:number): Observable<void>{

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PollItemComponent } from "../poll-item/poll-item.component";
 
+
 @Component({
   selector: 'app-poll',
   imports: [CommonModule, FormsModule, PollItemComponent],
@@ -22,24 +23,39 @@ export class PollComponent implements OnInit {
     ]
   }
   polls:Poll[]=[];
-
-
-
   
-  
+  paginated={
+    pageNumber:1,
+    pageSize:1,
+    totalElements:1,
+    totalPages:1,
+    last:false
+  }
+
+  currentPage = 1;
+  loading=true;
+
 
   constructor(private pollService: PollService){}
   
   
   ngOnInit(): void {
-    this.loadPolls();
+    this.loadPolls(1,5,"idDesc");
    
   }
 
-  loadPolls(){
-    this.pollService.getPolls().subscribe({
+  loadPolls(page:number,size:number,sort:String){
+    this.pollService.getPolls(page,size,sort).subscribe({
       next:(data)=>{
-        this.polls=data;
+        this.polls=data.content;
+        this.paginated={
+          pageNumber:data.pageNumber,
+          pageSize:data.pageSize,
+          totalElements:data.totalElements,
+          totalPages:data.totalPages,
+          last:data.last
+        }
+        this.loading=false;
          
       },
       error:(error)=>{
@@ -51,7 +67,7 @@ export class PollComponent implements OnInit {
   createPoll(){
     this.pollService.createPoll(this.newPoll).subscribe({
       next:(createdPoll)=>{
-        this.polls.push(createdPoll);
+        this.polls.unshift(createdPoll);
         this.resetPoll();
       },
       error:(error)=>{
@@ -72,11 +88,18 @@ export class PollComponent implements OnInit {
   }
 
   vote(pollId:number,optionIndex:number){
+    const key = `poll_${pollId}_voted`;
+
+    if(localStorage.getItem(key)){
+      return;
+    }
+
     this.pollService.vote(pollId,optionIndex).subscribe({
       next:()=>{
         const poll=this.polls.find(p=>p.id===pollId);
         if(poll){
           poll.options[optionIndex].voteCount++
+          localStorage.setItem(key,optionIndex.toString());
         }
       },
       error:(error)=>{
@@ -93,4 +116,10 @@ export class PollComponent implements OnInit {
   removeOption(index:number){
     this.newPoll.options.splice(index,1);
   }
+
+  setPage(page: number) {
+  this.currentPage = page;
+  this.loading=true;
+  this.loadPolls(page,5,"idDesc"); 
+}
 }

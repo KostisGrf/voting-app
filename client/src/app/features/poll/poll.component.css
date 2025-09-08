@@ -1,0 +1,15 @@
+.page-link {
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* semi-transparent border */
+  color: white;
+}
+
+.page-link:hover {
+  background-color: rgba(13, 110, 253, 0.2) !important; /* bootstrap primary transparent hover */
+}
+
+.page-item.active .page-link {
+  background-color: rgba(13, 110, 253, 0.5); /* semi-transparent bootstrap primary */
+  border: 1px solid rgba(13, 110, 253, 0.8); /* stronger border */
+  color: white; 
+}
