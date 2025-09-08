@@ -24,6 +24,10 @@
 
 
 <h2 class="mt-4 text-center">Available polls</h2>
+<div class="mb-5 mt-5 d-flex justify-content-center">
+       <input type="text" class="form-control search-control" placeholder="Search polls..." [formControl]="searchControl" />
+
+</div>         
 
 @if (!loading) {
 <div class="polls-list">
@@ -31,7 +35,9 @@
         @for (poll of polls; track poll.id) {
             <app-poll-item [poll]="poll"(voted)="vote(poll.id,$event)"></app-poll-item>
         }
-        <nav aria-label="...">
+        
+    @if(paginated.totalPages>1){
+          <nav aria-label="...">
   <ul class="pagination pagination-lg justify-content-center">
     @for (page of [].constructor(paginated.totalPages); track $index) {
         <li class="page-item" [class.active]="currentPage === $index + 1">
@@ -42,6 +48,8 @@
     }
   </ul>
 </nav>
+    }
+
    
 </div>
 }@else {

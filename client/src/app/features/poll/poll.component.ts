@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { PollService } from '../../core/services/poll.service';
 import { Poll } from '../../shared/poll';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PollItemComponent } from "../poll-item/poll-item.component";
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 
 @Component({
   selector: 'app-poll',
-  imports: [CommonModule, FormsModule, PollItemComponent],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, PollItemComponent],
   templateUrl: './poll.component.html',
   styleUrl: './poll.component.css'
 })
@@ -22,6 +23,7 @@ export class PollComponent implements OnInit {
       {voteOption:'',voteCount:0}
     ]
   }
+  searchTerm:string='';
   polls:Poll[]=[];
   
   paginated={
@@ -35,17 +37,29 @@ export class PollComponent implements OnInit {
   currentPage = 1;
   loading=true;
 
+  searchControl = new FormControl();
+
 
   constructor(private pollService: PollService){}
   
   
   ngOnInit(): void {
     this.loadPolls(1,5,"idDesc");
+
+    this.searchControl.valueChanges
+    .pipe(
+      debounceTime(300), // wait 300ms after typing stops
+      distinctUntilChanged()
+    )
+    .subscribe(value => {
+      this.searchTerm = value;
+      this.searchPolls();
+    });
    
   }
 
-  loadPolls(page:number,size:number,sort:String){
-    this.pollService.getPolls(page,size,sort).subscribe({
+  loadPolls(page:number,size:number,sort:string){
+    this.pollService.getPolls(page,size,sort,this.searchTerm).subscribe({
       next:(data)=>{
         this.polls=data.content;
         this.paginated={
@@ -115,6 +129,14 @@ export class PollComponent implements OnInit {
 
   removeOption(index:number){
     this.newPoll.options.splice(index,1);
+  }
+
+  searchPolls(){
+    if(this.searchTerm.length>=3||this.searchTerm.length===0){
+      this.currentPage=1;
+      this.loading=true;
+      this.loadPolls(this.currentPage,5,"idDesc");
+    }
   }
 
   setPage(page: number) {

@@ -13,3 +13,14 @@
   border: 1px solid rgba(13, 110, 253, 0.8); /* stronger border */
   color: white; 
 }
+
+.search-control{
+  width:40%;
+  display: flex;
+}
+
+@media(max-width:768px){
+  .search-control{
+    width: 100%;
+  }
+}
